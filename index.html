@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tajir Coffee — Sistem Kasir</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --red-deep: #6b0000;
+        --red-primary: #9b1a1a;
+        --red-bright: #c0272d;
+        --red-light: #e04040;
+        --red-glow: rgba(155, 26, 26, 0.4);
+        --red-subtle: rgba(192, 39, 45, 0.1);
+        --cream: #fff8f0;
+        --off-white: #f2e8e0;
+        --dark: #0a0303;
+        --dark-card: #130606;
+        --dark-mid: #1e0a0a;
+        --dark-hover: #261010;
+        --gold: #d4a017;
+        --green: #4ade80;
+        --text-muted: rgba(255, 248, 240, 0.38);
+        --text-sub: rgba(255, 248, 240, 0.62);
+        --border: rgba(255, 255, 255, 0.055);
+        --border-red: rgba(155, 26, 26, 0.35);
+        --radius-sm: 10px;
+        --radius-md: 16px;
+        --radius-lg: 22px;
+        --radius-xl: 32px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--cream);
+        font-family: "Plus Jakarta Sans", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Noise texture */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ===== HEADER ===== */
+      .header {
+        position: relative;
+        background: linear-gradient(
+          155deg,
+          var(--red-deep) 0%,
+          var(--red-primary) 50%,
+          #b82020 100%
+        );
+        padding: 44px 24px 56px;
+        text-align: center;
+        border-radius: 0 0 36px 36px;
+        box-shadow:
+          0 6px 0 #4a0000,
+          0 18px 48px rgba(0, 0, 0, 0.7),
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        top: -90px;
+        right: -70px;
+      }
+      .header::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        bottom: -50px;
+        left: -40px;
+      }
+
+      /* Extra decorative dot */
+      .header-deco {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        top: 28px;
+        right: 28px;
+        z-index: 1;
+      }
+
+      .logo-text {
+        font-family: "Fredoka", sans-serif;
+        font-size: 3.8rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: -1.5px;
+        line-height: 1;
+        text-shadow:
+          0 2px 0 rgba(0, 0, 0, 0.35),
+          0 0 40px rgba(255, 255, 255, 0.12);
+        position: relative;
+        z-index: 1;
+      }
+
+      .sub-logo {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 0.6rem;
+        font-weight: 600;
+        letter-spacing: 3.5px;
+        text-transform: uppercase;
+        opacity: 0.55;
+        margin-top: 4px;
+        position: relative;
+        z-index: 1;
+      }
+
+      #clock {
+        font-size: 0.55rem;
+        letter-spacing: 4px;
+        opacity: 0.42;
+        margin-top: 14px;
+        text-transform: uppercase;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ===== LAYOUT ===== */
+      .container {
+        max-width: 460px;
+        margin: 0 auto;
+        padding: 22px 15px 48px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ===== TABS ===== */
+      .tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-bottom: 20px;
+        background: var(--dark-card);
+        border-radius: var(--radius-md);
+        padding: 5px;
+        border: 1px solid var(--border);
+      }
+
+      .tab-btn {
+        padding: 11px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        border-radius: var(--radius-sm);
+        color: var(--text-muted);
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+
+      .tab-btn.active {
+        background: linear-gradient(
+          135deg,
+          var(--red-primary),
+          var(--red-bright)
+        );
+        color: #fff;
+        box-shadow: 0 3px 14px var(--red-glow);
+      }
+
+      .tab-btn:not(.active):hover {
+        color: var(--text-sub);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      /* ===== CARDS ===== */
+      .card {
+        background: var(--dark-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 18px 18px 10px;
+        margin-bottom: 14px;
+        box-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
+      }
+
+      .card-title {
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, var(--border-red), transparent);
+      }
+
+      /* ===== STOK ROWS ===== */
+      .stok-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      .stok-row:last-child {
+        border-bottom: none;
+        padding-bottom: 6px;
+      }
+      .stok-row:first-child {
+        padding-top: 0;
+      }
+
+      .stok-name {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--cream);
+        line-height: 1.3;
+      }
+
+      .stok-price {
+        font-size: 0.62rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-weight: 500;
+      }
+
+      .qty-input {
+        background: var(--dark-mid);
+        border: 1px solid var(--border-red);
+        border-radius: var(--radius-sm);
+        color: var(--cream);
+        text-align: center;
+        width: 60px;
+        padding: 7px 4px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        font-family: inherit;
+        outline: none;
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s;
+      }
+
+      .qty-input:focus {
+        border-color: var(--red-primary);
+        box-shadow: 0 0 0 2px var(--red-glow);
+      }
+
+      /* ===== JUAL ROWS ===== */
+      .jual-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      .jual-row:last-child {
+        border-bottom: none;
+        padding-bottom: 4px;
+      }
+      .jual-row:first-child {
+        padding-top: 0;
+      }
+
+      .jual-name {
+        font-size: 0.83rem;
+        font-weight: 700;
+        color: var(--cream);
+        line-height: 1.3;
+      }
+
+      .jual-meta {
+        font-size: 0.6rem;
+        color: var(--text-muted);
+        margin-top: 3px;
+        font-weight: 500;
+      }
+
+      .counter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      .counter-val {
+        font-size: 1.15rem;
+        font-weight: 800;
+        min-width: 22px;
+        text-align: center;
+        color: var(--cream);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .btn-minus,
+      .btn-plus {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        font-size: 1.05rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+        font-family: inherit;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .btn-minus {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-sub);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+      }
+      .btn-minus:hover {
+        background: rgba(255, 255, 255, 0.09);
+      }
+
+      .btn-plus {
+        background: linear-gradient(
+          135deg,
+          var(--red-primary),
+          var(--red-bright)
+        );
+        color: #fff;
+        box-shadow: 0 2px 10px var(--red-glow);
+      }
+      .btn-plus:hover {
+        box-shadow: 0 3px 16px var(--red-glow);
+        transform: scale(1.05);
+      }
+
+      .btn-minus:active,
+      .btn-plus:active {
+        transform: scale(0.88);
+      }
+
+      /* ===== TOTAL BAR ===== */
+      .total-bar {
+        background: var(--dark-card);
+        border: 1px solid var(--border-red);
+        border-radius: var(--radius-lg);
+        padding: 18px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        box-shadow:
+          0 4px 24px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.04),
+          inset 0 0 0 1px rgba(155, 26, 26, 0.08);
+      }
+
+      .total-label {
+        font-size: 0.55rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+      }
+
+      .total-amount {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.5px;
+      }
+
+      .total-cups {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-sub);
+        text-align: right;
+        line-height: 1.7;
+      }
+
+      /* ===== BUTTONS ===== */
+      .btn-primary {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: var(--radius-md);
+        background: linear-gradient(
+          135deg,
+          var(--red-bright),
+          var(--red-primary)
+        );
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-family: inherit;
+        box-shadow:
+          0 5px 22px var(--red-glow),
+          0 2px 0 var(--red-deep),
+          inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.45s ease;
+      }
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+      .btn-primary:hover {
+        box-shadow:
+          0 7px 28px var(--red-glow),
+          0 2px 0 var(--red-deep);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 10px var(--red-glow);
+      }
+
+      .btn-ghost {
+        width: 100%;
+        padding: 9px;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-family: inherit;
+        transition: color 0.2s;
+      }
+      .btn-ghost:hover {
+        color: var(--red-light);
+      }
+
+      /* ===== MODAL ===== */
+      #modal {
+        position: fixed;
+        inset: 0;
+        background: var(--dark);
+        z-index: 100;
+        overflow-y: auto;
+        display: none;
+        animation: slideUp 0.28s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(24px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-header {
+        background: linear-gradient(
+          155deg,
+          var(--red-deep),
+          var(--red-primary)
+        );
+        padding: 38px 24px 48px;
+        text-align: center;
+        border-radius: 0 0 36px 36px;
+        box-shadow:
+          0 6px 0 #4a0000,
+          0 18px 40px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .modal-header::before {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.065);
+        top: -65px;
+        right: -45px;
+      }
+
+      .report-subtitle {
+        font-size: 0.58rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        opacity: 0.48;
+        margin-top: 5px;
+        font-weight: 600;
+      }
+
+      .modal-inner {
+        max-width: 460px;
+        margin: 0 auto;
+        padding: 0 15px 48px;
+      }
+
+      /* Report rows */
+      .rep-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 8px;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.12s;
+      }
+      .rep-row:last-child {
+        border-bottom: none;
+        padding-bottom: 2px;
+      }
+
+      .rep-name {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--cream);
+      }
+      .rep-qty {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-align: right;
+        white-space: nowrap;
+      }
+      .rep-subtotal {
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: var(--red-light);
+        text-align: right;
+        white-space: nowrap;
+        min-width: 82px;
+      }
+
+      .rep-zero .rep-name {
+        opacity: 0.32;
+      }
+      .rep-zero .rep-qty {
+        opacity: 0.22;
+      }
+      .rep-zero .rep-subtotal {
+        opacity: 0.18;
+      }
+
+      .summary-card {
+        background: var(--dark-card);
+        border: 1px solid var(--border-red);
+        border-radius: var(--radius-lg);
+        padding: 18px 18px 20px;
+        margin: 14px 0;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 0;
+      }
+
+      .summary-key {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      .summary-val {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: var(--cream);
+      }
+
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--border-red),
+          transparent
+        );
+        margin: 12px 0;
+      }
+
+      .net-label {
+        font-size: 0.6rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+        font-weight: 700;
+      }
+      .net-val {
+        font-size: 1.55rem;
+        font-weight: 800;
+        color: var(--green);
+        letter-spacing: -0.5px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .biaya-input {
+        background: var(--dark-mid);
+        border: 1px solid var(--border-red);
+        border-radius: var(--radius-sm);
+        color: var(--cream);
+        padding: 11px 14px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        font-family: inherit;
+        width: 100%;
+        outline: none;
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s;
+        margin-bottom: 4px;
+      }
+      .biaya-input:focus {
+        border-color: var(--red-primary);
+        box-shadow: 0 0 0 2px var(--red-glow);
+      }
+      .biaya-input::placeholder {
+        color: var(--text-muted);
+      }
+
+      /* Column header */
+      .rep-col-header {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 2px;
+      }
+      .rep-col-label {
+        font-size: 0.56rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+      .rep-col-label:not(:first-child) {
+        text-align: right;
+      }
+      .rep-col-label:last-child {
+        min-width: 82px;
+      }
+
+      .btn-secondary {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        background: transparent;
+        color: var(--cream);
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        margin-bottom: 10px;
+        transition: all 0.2s;
+      }
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .sheets-cta {
+        background: linear-gradient(135deg, #166534, #16a34a) !important;
+        box-shadow:
+          0 5px 22px rgba(22, 163, 74, 0.35),
+          0 2px 0 #0f4621 !important;
+      }
+      .sheets-cta:hover {
+        box-shadow:
+          0 7px 28px rgba(22, 163, 74, 0.45),
+          0 2px 0 #0f4621 !important;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      ::-webkit-scrollbar {
+        width: 3px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--dark);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--red-primary);
+        border-radius: 3px;
+      }
+
+      /* Subtle separator in sections */
+      .section-sep {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--red-primary),
+          var(--red-bright),
+          transparent
+        );
+        border-radius: 1px;
+        margin: 12px 0;
+        opacity: 0.55;
+      }
+
+      /* Category pill */
+      .cat-pill {
+        display: inline-block;
+        font-size: 0.52rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 2px 7px;
+        margin: 6px 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-deco"></div>
+      <div class="logo-text">TĀJIR</div>
+      <div class="sub-logo">by: bilhudã</div>
+      <div id="clock"></div>
+    </div>
+
+    <div class="container">
+      <!-- TABS -->
+      <div class="tabs">
+        <button onclick="showTab('stok')" id="btn-stok" class="tab-btn active">
+          📦 Stok
+        </button>
+        <button onclick="showTab('jual')" id="btn-jual" class="tab-btn">
+          🛒 Jual
+        </button>
+      </div>
+
+      <!-- SECTION STOK -->
+      <div id="section-stok">
+        <div class="card">
+          <div class="card-title">Input Stok</div>
+          <div id="stok-container"></div>
+        </div>
+        <button onclick="showTab('jual')" class="btn-primary">
+          Masuk ke Kasir →
+        </button>
+      </div>
+
+      <!-- SECTION JUAL -->
+      <div id="section-jual" class="hidden">
+        <div class="card">
+          <div class="card-title">Menu Penjualan</div>
+          <div id="jual-container"></div>
+        </div>
+
+        <div class="total-bar">
+          <div>
+            <div class="total-label">Total Laku</div>
+            <div id="total-money" class="total-amount">Rp 0</div>
+          </div>
+          <div>
+            <div id="total-qty" class="total-cups">0 Cup</div>
+            <div id="sisa-stok" class="total-cups">Sisa: 0 Cup</div>
+          </div>
+        </div>
+
+        <button onclick="generateReport()" class="btn-primary">
+          📊 Lihat Laporan
+        </button>
+        <button onclick="resetApp()" class="btn-ghost">Hapus Semua Data</button>
+      </div>
+    </div>
+
+    <!-- MODAL LAPORAN -->
+    <div id="modal">
+      <div class="modal-header">
+        <div class="logo-text">TĀJIR</div>
+        <div class="report-subtitle">Laporan Akhir Hari</div>
+      </div>
+
+      <div class="modal-inner">
+        <div class="card">
+          <div class="card-title">Detail Penjualan</div>
+          <div class="rep-col-header">
+            <span class="rep-col-label">Menu</span>
+            <span class="rep-col-label">Qty</span>
+            <span class="rep-col-label" style="min-width: 82px">Subtotal</span>
+          </div>
+          <div id="report-items"></div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-row">
+            <span class="summary-key">Total Pendapatan Kotor</span>
+            <span id="rep-gross" class="summary-val"></span>
+          </div>
+          <div class="divider"></div>
+
+          <label
+            style="
+              font-size: 0.62rem;
+              font-weight: 700;
+              color: var(--text-muted);
+              letter-spacing: 2px;
+              text-transform: uppercase;
+              display: block;
+              margin-bottom: 8px;
+            "
+          >
+            Biaya / Modal
+          </label>
+          <input
+            type="number"
+            id="biaya"
+            placeholder="Masukkan biaya operasional..."
+            class="biaya-input"
+            oninput="calcNet()"
+          />
+
+          <div class="divider"></div>
+          <div class="net-label">Profit Bersih</div>
+          <div id="rep-net" class="net-val">Rp 0</div>
+        </div>
+
+        <button onclick="closeModal()" class="btn-secondary">← Kembali</button>
+        <button onclick="kirimSheets()" class="btn-primary sheets-cta">
+          📤 Kirim ke Google Sheets
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // ============================================================
+      // TAJIR COFFEE — FINAL FIX (Sheets + Bug Fix)
+      // ============================================================
+
+      const MENUS = [
+        { id: "lb", name: "Longblack Tajir", price: 10000, cat: "coffee" },
+        { id: "bp", name: "BlackPeach Tajir", price: 12000, cat: "coffee" },
+        { id: "sg", name: "Sanger Tajir", price: 13000, cat: "coffee" },
+        { id: "hz", name: "Hazelnut Tajir", price: 13000, cat: "coffee" },
+        { id: "ca", name: "Caramel Tajir", price: 13000, cat: "coffee" },
+        { id: "ar", name: "Aren Tajir", price: 13000, cat: "coffee" },
+        { id: "ma", name: "Matcha Tajir", price: 15000, cat: "non" },
+        { id: "rv", name: "Red Velvet Tajir", price: 12000, cat: "non" },
+        { id: "br", name: "Brown Tajir", price: 13000, cat: "non" },
+      ];
+
+      function defaultDb() {
+        const stok = {},
+          jual = {};
+        MENUS.forEach((m) => {
+          stok[m.id] = 0;
+          jual[m.id] = 0;
+        });
+        return { stok, jual };
+      }
+
+      function loadDb() {
+        try {
+          const raw = localStorage.getItem("tajir_v4");
+          if (raw) return JSON.parse(raw);
+        } catch {}
+        return defaultDb();
+      }
+
+      let db = loadDb();
+
+      function save() {
+        localStorage.setItem("tajir_v4", JSON.stringify(db));
+        updateTotal();
+      }
+
+      function fmt(n) {
+        return "Rp " + n.toLocaleString("id-ID");
+      }
+
+      function getTotalCash() {
+        return MENUS.reduce(
+          (sum, m) => sum + (db.jual[m.id] || 0) * m.price,
+          0,
+        );
+      }
+
+      function getTotalJual() {
+        return MENUS.reduce((s, m) => s + (db.jual[m.id] || 0), 0);
+      }
+
+      function getTotalSisa() {
+        return MENUS.reduce((s, m) => {
+          return s + Math.max(0, (db.stok[m.id] || 0) - (db.jual[m.id] || 0));
+        }, 0);
+      }
+
+      function getTotalStok() {
+        return MENUS.reduce((s, m) => s + (db.stok[m.id] || 0), 0);
+      }
+
+      // Clock
+      function updateClock() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, "0");
+        const min = String(now.getMinutes()).padStart(2, "0");
+        const sec = String(now.getSeconds()).padStart(2, "0");
+        const d = now.toLocaleDateString("id-ID", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        document.getElementById("clock").innerText =
+          `${d}  •  ${h}:${min}:${sec}`;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      function init() {
+        renderStok();
+        updateTotal();
+      }
+
+      function renderStok() {
+        const c = document.getElementById("stok-container");
+
+        // Group by category
+        const coffeeItems = MENUS.filter((m) => m.cat === "coffee");
+        const nonItems = MENUS.filter((m) => m.cat === "non");
+
+        function buildRows(items) {
+          return items
+            .map(
+              (m) => `
+            <div class="stok-row">
+              <div>
+                <div class="stok-name">${m.name}</div>
+                <div class="stok-price">${fmt(m.price)}</div>
+              </div>
+              <input type="number" value="${db.stok[m.id]}"
+                class="qty-input"
+                oninput="setStok('${m.id}', this.value)">
+            </div>
+          `,
+            )
+            .join("");
+        }
+
+        c.innerHTML = `
+          <div class="cat-pill">☕ Coffee</div>
+          ${buildRows(coffeeItems)}
+          <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
+          ${buildRows(nonItems)}
+        `;
+      }
+
+      function setStok(id, val) {
+        db.stok[id] = Math.max(0, parseInt(val) || 0);
+        if (db.stok[id] < db.jual[id]) db.jual[id] = db.stok[id];
+        save();
+      }
+
+      function renderJual() {
+        const c = document.getElementById("jual-container");
+
+        // Group by category
+        const coffeeItems = MENUS.filter((m) => m.cat === "coffee");
+        const nonItems = MENUS.filter((m) => m.cat === "non");
+
+        function buildRows(items) {
+          return items
+            .map((m) => {
+              const laku = db.jual[m.id];
+              const sisa = Math.max(0, db.stok[m.id] - laku);
+              const id = m.id;
+              return `
+              <div class="jual-row">
+                <div>
+                  <div class="jual-name">${m.name}</div>
+                  <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
+                </div>
+                <div class="counter">
+                  <button class="btn-minus" onclick="adj('${id}',-1)">−</button>
+                  <span class="counter-val">${laku}</span>
+                  <button class="btn-plus" onclick="adj('${id}',1)">+</button>
+                </div>
+              </div>
+            `;
+            })
+            .join("");
+        }
+
+        c.innerHTML = `
+          <div class="cat-pill">☕ Coffee</div>
+          ${buildRows(coffeeItems)}
+          <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
+          ${buildRows(nonItems)}
+        `;
+      }
+
+      function adj(id, val) {
+        if (val > 0 && db.jual[id] >= db.stok[id]) {
+          alert("Stok habis!");
+          return;
+        }
+        db.jual[id] = Math.max(0, db.jual[id] + val);
+        save();
+        renderJual();
+      }
+
+      function updateTotal() {
+        document.getElementById("total-money").innerText = fmt(getTotalCash());
+        document.getElementById("total-qty").innerText =
+          getTotalJual() + " Cup";
+        document.getElementById("sisa-stok").innerText =
+          "Sisa: " + getTotalSisa() + " Cup";
+      }
+
+      function showTab(t) {
+        document
+          .getElementById("section-stok")
+          .classList.toggle("hidden", t !== "stok");
+        document
+          .getElementById("section-jual")
+          .classList.toggle("hidden", t !== "jual");
+        document
+          .getElementById("btn-stok")
+          .classList.toggle("active", t === "stok");
+        document
+          .getElementById("btn-jual")
+          .classList.toggle("active", t === "jual");
+        if (t === "jual") renderJual();
+      }
+
+      function generateReport() {
+        const gross = getTotalCash();
+        document.getElementById("rep-gross").innerText = fmt(gross);
+        document.getElementById("rep-net").innerText = fmt(gross);
+        document.getElementById("biaya").value = "";
+
+        document.getElementById("report-items").innerHTML = MENUS.map((m) => {
+          const laku = db.jual[m.id];
+          const subtotal = laku * m.price;
+          const isZero = laku === 0;
+          return `
+            <div class="rep-row${isZero ? " rep-zero" : ""}">
+              <span class="rep-name">${m.name}</span>
+              <span class="rep-qty">${laku} cup</span>
+              <span class="rep-subtotal">${fmt(subtotal)}</span>
+            </div>
+          `;
+        }).join("");
+
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("modal").scrollTop = 0;
+      }
+
+      function closeModal() {
+        document.getElementById("modal").style.display = "none";
+      }
+
+      function calcNet() {
+        const biaya = parseInt(document.getElementById("biaya").value) || 0;
+        const gross = getTotalCash();
+        document.getElementById("rep-net").innerText = fmt(gross - biaya);
+      }
+
+      function resetApp() {
+        if (!confirm("Yakin hapus semua data hari ini?")) return;
+        localStorage.removeItem("tajir_v4");
+        location.reload();
+      }
+
+      // ================= GOOGLE SHEETS =================
+
+      function getSheetsUrl() {
+        return localStorage.getItem("tajir_sheets_url") || "";
+      }
+
+      let sending = false;
+
+      function kirimSheets() {
+        if (sending) {
+          alert("⏳ Data sedang dikirim, tunggu sebentar...");
+          return;
+        }
+        sending = true;
+
+        const url = getSheetsUrl();
+        if (!url) {
+          alert("Isi URL Sheets dulu!");
+          sending = false;
+          return;
+        }
+
+        const biaya = parseInt(document.getElementById("biaya").value) || 0;
+        const gross = getTotalCash();
+        const profit = gross - biaya;
+        const tanggal = new Date().toLocaleString("id-ID");
+        const totalCup = getTotalJual();
+
+        // 1 baris horizontal:
+        // [Tanggal, Total Pendapatan, Total Cup, Biaya, Profit, lb_qty, bp_qty, sg_qty, hz_qty, ca_qty, ar_qty, ma_qty, rv_qty, br_qty]
+        const menuQtys = MENUS.map((m) => db.jual[m.id] || 0);
+        const row = [tanggal, gross, totalCup, biaya, profit, ...menuQtys];
+
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify({ data: [row] }),
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+        })
+          .then((res) => res.text())
+          .then(() => {
+            alert("✅ Berhasil kirim ke Sheets");
+            sending = false;
+          })
+          .catch(() => {
+            alert("❌ Gagal kirim");
+            sending = false;
+          });
+      }
+
+      // INIT
+      init();
+    </script>
+  </body>
+</html>
