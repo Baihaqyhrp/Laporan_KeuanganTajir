@@ -999,26 +999,26 @@
           return items
             .map(
               (m) => `
-            <div class="stok-row">
-              <div>
-                <div class="stok-name">${m.name}</div>
-                <div class="stok-price">${fmt(m.price)}</div>
-              </div>
-              <input type="number" value="${db.stok[m.id]}"
-                class="qty-input"
-                oninput="setStok('${m.id}', this.value)">
-            </div>
-          `,
+                <div class="stok-row">
+                <div>
+                    <div class="stok-name">${m.name}</div>
+                    <div class="stok-price">${fmt(m.price)}</div>
+                </div>
+                <input type="number" value="${db.stok[m.id]}"
+                    class="qty-input"
+                    oninput="setStok('${m.id}', this.value)">
+                </div>
+            `,
             )
             .join("");
         }
 
         c.innerHTML = `
-          <div class="cat-pill">☕ Coffee</div>
-          ${buildRows(coffeeItems)}
-          <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
-          ${buildRows(nonItems)}
-        `;
+            <div class="cat-pill">☕ Coffee</div>
+            ${buildRows(coffeeItems)}
+            <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
+            ${buildRows(nonItems)}
+            `;
       }
 
       function setStok(id, val) {
@@ -1041,28 +1041,28 @@
               const sisa = Math.max(0, db.stok[m.id] - laku);
               const id = m.id;
               return `
-              <div class="jual-row">
-                <div>
-                  <div class="jual-name">${m.name}</div>
-                  <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
+                <div class="jual-row">
+                    <div>
+                    <div class="jual-name">${m.name}</div>
+                    <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
+                    </div>
+                    <div class="counter">
+                    <button class="btn-minus" onclick="adj('${id}',-1)">−</button>
+                    <span class="counter-val">${laku}</span>
+                    <button class="btn-plus" onclick="adj('${id}',1)">+</button>
+                    </div>
                 </div>
-                <div class="counter">
-                  <button class="btn-minus" onclick="adj('${id}',-1)">−</button>
-                  <span class="counter-val">${laku}</span>
-                  <button class="btn-plus" onclick="adj('${id}',1)">+</button>
-                </div>
-              </div>
-            `;
+                `;
             })
             .join("");
         }
 
         c.innerHTML = `
-          <div class="cat-pill">☕ Coffee</div>
-          ${buildRows(coffeeItems)}
-          <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
-          ${buildRows(nonItems)}
-        `;
+            <div class="cat-pill">☕ Coffee</div>
+            ${buildRows(coffeeItems)}
+            <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
+            ${buildRows(nonItems)}
+            `;
       }
 
       function adj(id, val) {
@@ -1110,12 +1110,12 @@
           const subtotal = laku * m.price;
           const isZero = laku === 0;
           return `
-            <div class="rep-row${isZero ? " rep-zero" : ""}">
-              <span class="rep-name">${m.name}</span>
-              <span class="rep-qty">${laku} cup</span>
-              <span class="rep-subtotal">${fmt(subtotal)}</span>
-            </div>
-          `;
+                <div class="rep-row${isZero ? " rep-zero" : ""}">
+                <span class="rep-name">${m.name}</span>
+                <span class="rep-qty">${laku} cup</span>
+                <span class="rep-subtotal">${fmt(subtotal)}</span>
+                </div>
+            `;
         }).join("");
 
         document.getElementById("modal").style.display = "block";
@@ -1164,7 +1164,14 @@
         // 1 baris horizontal:
         // [Tanggal, Total Pendapatan, Total Cup, Biaya, Profit, lb_qty, bp_qty, sg_qty, hz_qty, ca_qty, ar_qty, ma_qty, rv_qty, br_qty]
         const menuQtys = MENUS.map((m) => db.jual[m.id] || 0);
-        const row = [tanggal, gross, totalCup, biaya, profit, ...menuQtys];
+        const row = [
+          tanggal,
+          ...menuQtys, // semua qty menu dulu
+          totalCup,
+          gross,
+          biaya,
+          profit,
+        ];
 
         fetch(url, {
           method: "POST",
