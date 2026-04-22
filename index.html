@@ -886,6 +886,30 @@
             oninput="calcNet()"
           />
 
+          <!-- === TAMBAHAN: Input Pengeluaran Tambahan === -->
+          <label
+            style="
+              font-size: 0.62rem;
+              font-weight: 700;
+              color: var(--text-muted);
+              letter-spacing: 2px;
+              text-transform: uppercase;
+              display: block;
+              margin-top: 14px;
+              margin-bottom: 8px;
+            "
+          >
+            Pengeluaran Tambahan
+          </label>
+          <input
+            type="number"
+            id="pengeluaranTambahan"
+            placeholder="Masukkan pengeluaran tambahan..."
+            class="biaya-input"
+            oninput="calcNet()"
+          />
+          <!-- === AKHIR TAMBAHAN: Input Pengeluaran Tambahan === -->
+
           <div class="divider"></div>
           <div class="net-label">Profit Bersih</div>
           <div id="rep-net" class="net-val">Rp 0</div>
@@ -900,7 +924,7 @@
 
     <script>
       // ============================================================
-      // TAJIR COFFEE — FINAL FIX (Sheets + Bug Fix)
+      // TAJIR COFFEE — FINAL FIX (Sheets + Bug Fix + Pengeluaran Tambahan)
       // ============================================================
 
       const MENUS = [
@@ -1105,6 +1129,10 @@
         document.getElementById("rep-net").innerText = fmt(gross);
         document.getElementById("biaya").value = "";
 
+        // === TAMBAHAN: Reset input pengeluaran tambahan saat laporan dibuka ===
+        document.getElementById("pengeluaranTambahan").value = "";
+        // === AKHIR TAMBAHAN ===
+
         document.getElementById("report-items").innerHTML = MENUS.map((m) => {
           const laku = db.jual[m.id];
           const subtotal = laku * m.price;
@@ -1126,11 +1154,23 @@
         document.getElementById("modal").style.display = "none";
       }
 
+      // === TAMBAHAN: calcNet diupdate untuk menghitung pengeluaran tambahan ===
       function calcNet() {
         const biaya = parseInt(document.getElementById("biaya").value) || 0;
+
+        // Ambil nilai pengeluaran tambahan dari input baru
+        const pengeluaranTambahan =
+          parseInt(document.getElementById("pengeluaranTambahan").value) || 0;
+
+        // Total pengeluaran = biaya modal + pengeluaran tambahan
+        const totalPengeluaran = biaya + pengeluaranTambahan;
+
         const gross = getTotalCash();
-        document.getElementById("rep-net").innerText = fmt(gross - biaya);
+
+        // Profit bersih = pendapatan kotor - total pengeluaran
+        document.getElementById("rep-net").innerText = fmt(gross - totalPengeluaran);
       }
+      // === AKHIR TAMBAHAN: calcNet ===
 
       function resetApp() {
         if (!confirm("Yakin hapus semua data hari ini?")) return;
@@ -1145,6 +1185,7 @@
 
       let sending = false;
 
+      // === TAMBAHAN: kirimSheets diupdate — urutan kolom baru + pengeluaran tambahan ===
       function kirimSheets() {
         if (sending) {
           alert("⏳ Data sedang dikirim, tunggu sebentar...");
@@ -1152,25 +1193,39 @@
         }
         sending = true;
 
+        // URL tidak diubah
         const url =
           "https://script.google.com/macros/s/AKfycbwmG8gAJShnQySAMKbeP7GWngS_OHJXqyWMmdsFU7NqxI_uNgxRV9EcBWnCd4q_91gfQg/exec";
 
         const biaya = parseInt(document.getElementById("biaya").value) || 0;
+
+        // Ambil pengeluaran tambahan dari input baru
+        const pengeluaranTambahan =
+          parseInt(document.getElementById("pengeluaranTambahan").value) || 0;
+
+        // Total pengeluaran = biaya modal + pengeluaran tambahan
+        const totalPengeluaran = biaya + pengeluaranTambahan;
+
         const gross = getTotalCash();
-        const profit = gross - biaya;
+
+        // Profit = total pendapatan - total pengeluaran (sudah termasuk pengeluaran tambahan)
+        const profit = gross - totalPengeluaran;
+
         const tanggal = new Date().toLocaleString("id-ID");
         const totalCup = getTotalJual();
 
-        // 1 baris horizontal:
-        // [Tanggal, Total Pendapatan, Total Cup, Biaya, Profit, lb_qty, bp_qty, sg_qty, hz_qty, ca_qty, ar_qty, ma_qty, rv_qty, br_qty]
+        // Urutan kolom sesuai format Google Sheets yang diminta:
+        // [ tanggal, qty_longblack, qty_blackpeach, qty_sanger, qty_hazelnut,
+        //   qty_caramel, qty_aren, qty_matcha, qty_redvelvet, qty_brown,
+        //   total_cup, total_pendapatan, total_pengeluaran, profit ]
         const menuQtys = MENUS.map((m) => db.jual[m.id] || 0);
         const row = [
-          tanggal,
-          ...menuQtys, // semua qty menu dulu
-          totalCup,
-          gross,
-          biaya,
-          profit,
+          tanggal,          // Tanggal
+          ...menuQtys,      // qty per menu (sesuai urutan array MENUS)
+          totalCup,         // Total Cup
+          gross,            // Total Pendapatan Kotor
+          totalPengeluaran, // Total Pengeluaran (biaya + pengeluaranTambahan)
+          profit,           // Profit Bersih
         ];
 
         fetch(url, {
@@ -1188,6 +1243,7 @@
             sending = false;
           });
       }
+      // === AKHIR TAMBAHAN: kirimSheets ===
 
       // INIT
       init();
