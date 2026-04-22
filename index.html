@@ -1152,12 +1152,8 @@
         }
         sending = true;
 
-        const url = getSheetsUrl();
-        if (!url) {
-          alert("Isi URL Sheets dulu!");
-          sending = false;
-          return;
-        }
+        const url =
+          "https://script.google.com/macros/s/AKfycbwmG8gAJShnQySAMKbeP7GWngS_OHJXqyWMmdsFU7NqxI_uNgxRV9EcBWnCd4q_91gfQg/exec";
 
         const biaya = parseInt(document.getElementById("biaya").value) || 0;
         const gross = getTotalCash();
