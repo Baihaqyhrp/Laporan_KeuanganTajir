@@ -1230,7 +1230,7 @@
     <!-- MODAL LAPORAN -->
     <div id="modal">
       <div class="modal-header">
-        <div class="logo-text">TĀJIR</div>
+        <div class="logo-text">TÂJIR</div>
         <div class="report-subtitle">Laporan Akhir Hari</div>
       </div>
       <div class="modal-inner">
@@ -1745,14 +1745,15 @@
       function kirimSheets() {
         const biaya = parseInt(document.getElementById("biaya").value) || 0;
 
-        const tanggal = new Date().toLocaleString("id-ID", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
+      const tanggal = new Date().toLocaleString("id-ID", {
+  weekday: "long", // ini untuk hari (Senin, Selasa, dst)
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+});
 
         const row = [
           tanggal,
