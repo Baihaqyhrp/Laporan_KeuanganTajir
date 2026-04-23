@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tajir Coffee — Sistem Kasir</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+      <link
+  href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@700;800&family=Playfair+Display:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+  rel="stylesheet"
+/>
     <style>
       :root {
         --red-deep: #6b0000;
@@ -1087,14 +1088,53 @@
       .gaji-driver-row .summary-val {
         color: #fca5a5;
       }
+      .header {
+        padding: 60px 24px 70px;
+      }
+      /* ===== LOGO TAJIR STYLE ===== */
+ .logo-tajir {
+  font-family: 'Baloo Bhai 2', cursive;
+  font-weight: 800;
+
+  /* BESARIN dikit biar keliatan empuk */
+  font-size: clamp(70px, 12vw, 130px);
+
+  color: #fff;
+  letter-spacing: -3px; /* lebih rapat = lebih padat/balon */
+  line-height: 1;
+
+  /* ini bikin feel "empuk" */
+  transform: scaleY(1.1); /* sedikit gendut ke atas bawah */
+
+  text-align: center;
+
+  text-shadow:
+    4px 4px 0 #7b1010,
+    6px 6px 0 #7b1010,
+    8px 8px 0 #7b1010,
+    10px 10px 0 #7b1010,
+    12px 12px 18px rgba(80, 0, 0, 0.45);
+}
+.logo-tajir {
+  -webkit-text-stroke: 1.5px rgba(0,0,0,0.05);
+}
+
+      .by-tajir {
+        font-family: "Playfair Display", serif;
+        font-size: 14px;
+        color: #fff;
+        letter-spacing: 1px;
+        margin-top: 6px;
+        opacity: 0.95;
+      }
     </style>
   </head>
   <body>
     <!-- ===== SPLASH SCREEN ===== -->
     <div id="splash">
-      <div class="splash-logo">TĀJIR</div>
+      <div class="splash-logo">TÂJIR</div>
       <div class="splash-tagline">by: bilhudã</div>
-      <div class="splash-welcome">Selamat Datang di Kasir TĀJIR</div>
+      <div class="splash-welcome">Selamat Datang di Kasir TÂJIR</div>
       <div class="splash-dots">
         <div class="splash-dot"></div>
         <div class="splash-dot"></div>
@@ -1104,8 +1144,10 @@
 
     <div class="header">
       <div class="header-deco"></div>
-      <div class="logo-text">TĀJIR</div>
-      <div class="sub-logo">by: bilhudã</div>
+      <div class="logo-tajir" style="font-size: clamp(40px, 6vw, 70px)">
+        TÂJIR
+      </div>
+      <div class="by-tajir">by : bilhudã</div>
       <div id="clock"></div>
     </div>
 
@@ -1444,14 +1486,14 @@
           items
             .map(
               (m) => `
-            <div class="stok-row">
-              <div>
-                <div class="stok-name">${m.name}</div>
-                <div class="stok-price">${fmt(m.price)}</div>
-              </div>
-              <input type="number" value="${db.stok[m.id]}" class="qty-input"
-                oninput="setStok('${m.id}', this.value)">
-            </div>`,
+              <div class="stok-row">
+                <div>
+                  <div class="stok-name">${m.name}</div>
+                  <div class="stok-price">${fmt(m.price)}</div>
+                </div>
+                <input type="number" value="${db.stok[m.id]}" class="qty-input"
+                  oninput="setStok('${m.id}', this.value)">
+              </div>`,
             )
             .join("");
         c.innerHTML =
@@ -1483,23 +1525,23 @@
               const badges =
                 cc > 0 || qc > 0
                   ? `<div class="payment-badges">
-                  ${cc > 0 ? `<span class="badge badge-cash">💵 ${cc}</span>` : ""}
-                  ${qc > 0 ? `<span class="badge badge-qris">📱 ${qc}</span>` : ""}
-                </div>`
+                    ${cc > 0 ? `<span class="badge badge-cash">💵 ${cc}</span>` : ""}
+                    ${qc > 0 ? `<span class="badge badge-qris">📱 ${qc}</span>` : ""}
+                  </div>`
                   : "";
               return `
-              <div class="jual-row">
-                <div>
-                  <div class="jual-name">${m.name}</div>
-                  <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
-                  ${badges}
-                </div>
-                <div class="counter">
-                  <button class="btn-minus" onclick="adjMinus('${m.id}')">−</button>
-                  <span class="counter-val" id="cv-${m.id}">${laku}</span>
-                  <button class="btn-plus" onclick="openPaymentPopup('${m.id}')">+</button>
-                </div>
-              </div>`;
+                <div class="jual-row">
+                  <div>
+                    <div class="jual-name">${m.name}</div>
+                    <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
+                    ${badges}
+                  </div>
+                  <div class="counter">
+                    <button class="btn-minus" onclick="adjMinus('${m.id}')">−</button>
+                    <span class="counter-val" id="cv-${m.id}">${laku}</span>
+                    <button class="btn-plus" onclick="openPaymentPopup('${m.id}')">+</button>
+                  </div>
+                </div>`;
             })
             .join("");
         c.innerHTML =
@@ -1632,10 +1674,10 @@
             subtotal = laku * m.price,
             isZero = laku === 0;
           return `<div class="rep-row${isZero ? " rep-zero" : ""}">
-            <span class="rep-name">${m.name}</span>
-            <span class="rep-qty">${laku} cup</span>
-            <span class="rep-subtotal">${fmt(subtotal)}</span>
-          </div>`;
+              <span class="rep-name">${m.name}</span>
+              <span class="rep-qty">${laku} cup</span>
+              <span class="rep-subtotal">${fmt(subtotal)}</span>
+            </div>`;
         }).join("");
 
         document.getElementById("modal").style.display = "block";
