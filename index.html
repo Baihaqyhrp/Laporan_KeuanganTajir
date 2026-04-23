@@ -15,14 +15,10 @@
         --red-bright: #c0272d;
         --red-light: #e04040;
         --red-glow: rgba(155, 26, 26, 0.4);
-        --red-subtle: rgba(192, 39, 45, 0.1);
         --cream: #fff8f0;
-        --off-white: #f2e8e0;
         --dark: #0a0303;
         --dark-card: #130606;
         --dark-mid: #1e0a0a;
-        --dark-hover: #261010;
-        --gold: #d4a017;
         --green: #4ade80;
         --text-muted: rgba(255, 248, 240, 0.38);
         --text-sub: rgba(255, 248, 240, 0.62);
@@ -31,9 +27,7 @@
         --radius-sm: 10px;
         --radius-md: 16px;
         --radius-lg: 22px;
-        --radius-xl: 32px;
       }
-
       *,
       *::before,
       *::after {
@@ -41,7 +35,6 @@
         margin: 0;
         padding: 0;
       }
-
       body {
         background-color: var(--dark);
         color: var(--cream);
@@ -50,8 +43,6 @@
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
       }
-
-      /* Noise texture */
       body::before {
         content: "";
         position: fixed;
@@ -61,7 +52,133 @@
         z-index: 0;
       }
 
-      /* ===== HEADER ===== */
+      /* ===== SPLASH SCREEN ===== */
+      #splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: linear-gradient(
+          155deg,
+          var(--red-deep) 0%,
+          var(--red-primary) 50%,
+          #b82020 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        animation: splashFadeOut 0.6s ease 2.4s forwards;
+      }
+      #splash::before {
+        content: "";
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        top: -120px;
+        right: -100px;
+      }
+      #splash::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        bottom: -80px;
+        left: -60px;
+      }
+      .splash-logo {
+        font-family: "Fredoka", sans-serif;
+        font-size: 4.8rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: -1.5px;
+        line-height: 1;
+        text-shadow:
+          0 2px 0 rgba(0, 0, 0, 0.35),
+          0 0 60px rgba(255, 255, 255, 0.15);
+        animation: splashLogoIn 0.5s ease 0.1s both;
+        position: relative;
+        z-index: 1;
+      }
+      .splash-tagline {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        animation: splashLogoIn 0.5s ease 0.3s both;
+        position: relative;
+        z-index: 1;
+      }
+      .splash-welcome {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: 8px;
+        animation: splashLogoIn 0.5s ease 0.5s both;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 0 32px;
+      }
+      .splash-dots {
+        display: flex;
+        gap: 8px;
+        margin-top: 28px;
+        animation: splashLogoIn 0.5s ease 0.7s both;
+        position: relative;
+        z-index: 1;
+      }
+      .splash-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        animation: dotPulse 0.9s ease infinite;
+      }
+      .splash-dot:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .splash-dot:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      @keyframes dotPulse {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(0.85);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+      }
+      @keyframes splashLogoIn {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes splashFadeOut {
+        from {
+          opacity: 1;
+          pointer-events: all;
+        }
+        to {
+          opacity: 0;
+          pointer-events: none;
+          visibility: hidden;
+        }
+      }
+
       .header {
         position: relative;
         background: linear-gradient(
@@ -81,7 +198,6 @@
         overflow: hidden;
         z-index: 1;
       }
-
       .header::before {
         content: "";
         position: absolute;
@@ -102,8 +218,6 @@
         bottom: -50px;
         left: -40px;
       }
-
-      /* Extra decorative dot */
       .header-deco {
         position: absolute;
         width: 6px;
@@ -114,7 +228,6 @@
         right: 28px;
         z-index: 1;
       }
-
       .logo-text {
         font-family: "Fredoka", sans-serif;
         font-size: 3.8rem;
@@ -128,9 +241,7 @@
         position: relative;
         z-index: 1;
       }
-
       .sub-logo {
-        font-family: "Plus Jakarta Sans", sans-serif;
         font-size: 0.6rem;
         font-weight: 600;
         letter-spacing: 3.5px;
@@ -140,7 +251,6 @@
         position: relative;
         z-index: 1;
       }
-
       #clock {
         font-size: 0.55rem;
         letter-spacing: 4px;
@@ -151,8 +261,6 @@
         position: relative;
         z-index: 1;
       }
-
-      /* ===== LAYOUT ===== */
       .container {
         max-width: 460px;
         margin: 0 auto;
@@ -160,8 +268,6 @@
         position: relative;
         z-index: 1;
       }
-
-      /* ===== TABS ===== */
       .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -172,7 +278,6 @@
         padding: 5px;
         border: 1px solid var(--border);
       }
-
       .tab-btn {
         padding: 11px;
         font-size: 0.7rem;
@@ -186,8 +291,8 @@
         cursor: pointer;
         transition: all 0.2s ease;
         font-family: inherit;
+        touch-action: manipulation;
       }
-
       .tab-btn.active {
         background: linear-gradient(
           135deg,
@@ -197,13 +302,10 @@
         color: #fff;
         box-shadow: 0 3px 14px var(--red-glow);
       }
-
       .tab-btn:not(.active):hover {
         color: var(--text-sub);
         background: rgba(255, 255, 255, 0.03);
       }
-
-      /* ===== CARDS ===== */
       .card {
         background: var(--dark-card);
         border: 1px solid var(--border);
@@ -212,7 +314,6 @@
         margin-bottom: 14px;
         box-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
       }
-
       .card-title {
         font-size: 0.58rem;
         font-weight: 800;
@@ -224,22 +325,18 @@
         align-items: center;
         gap: 10px;
       }
-
       .card-title::after {
         content: "";
         flex: 1;
         height: 1px;
         background: linear-gradient(90deg, var(--border-red), transparent);
       }
-
-      /* ===== STOK ROWS ===== */
       .stok-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 9px 0;
         border-bottom: 1px solid var(--border);
-        transition: background 0.15s;
       }
       .stok-row:last-child {
         border-bottom: none;
@@ -248,21 +345,18 @@
       .stok-row:first-child {
         padding-top: 0;
       }
-
       .stok-name {
         font-size: 0.82rem;
         font-weight: 600;
         color: var(--cream);
         line-height: 1.3;
       }
-
       .stok-price {
         font-size: 0.62rem;
         color: var(--text-muted);
         margin-top: 2px;
         font-weight: 500;
       }
-
       .qty-input {
         background: var(--dark-mid);
         border: 1px solid var(--border-red);
@@ -279,20 +373,16 @@
           border-color 0.18s,
           box-shadow 0.18s;
       }
-
       .qty-input:focus {
         border-color: var(--red-primary);
         box-shadow: 0 0 0 2px var(--red-glow);
       }
-
-      /* ===== JUAL ROWS ===== */
       .jual-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 11px 0;
         border-bottom: 1px solid var(--border);
-        transition: background 0.15s;
       }
       .jual-row:last-child {
         border-bottom: none;
@@ -301,28 +391,24 @@
       .jual-row:first-child {
         padding-top: 0;
       }
-
       .jual-name {
         font-size: 0.83rem;
         font-weight: 700;
         color: var(--cream);
         line-height: 1.3;
       }
-
       .jual-meta {
         font-size: 0.6rem;
         color: var(--text-muted);
         margin-top: 3px;
         font-weight: 500;
       }
-
       .counter {
         display: flex;
         align-items: center;
         gap: 10px;
         flex-shrink: 0;
       }
-
       .counter-val {
         font-size: 1.15rem;
         font-weight: 800;
@@ -330,16 +416,22 @@
         text-align: center;
         color: var(--cream);
         font-variant-numeric: tabular-nums;
+        transition:
+          transform 0.15s ease,
+          opacity 0.15s ease;
       }
-
+      .counter-val.bump {
+        transform: scale(1.35);
+        opacity: 0.7;
+      }
       .btn-minus,
       .btn-plus {
-        width: 32px;
-        height: 32px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
-        font-size: 1.05rem;
+        font-size: 1.15rem;
         font-weight: 700;
         display: flex;
         align-items: center;
@@ -348,8 +440,10 @@
         font-family: inherit;
         line-height: 1;
         flex-shrink: 0;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
       }
-
       .btn-minus {
         background: rgba(255, 255, 255, 0.05);
         color: var(--text-sub);
@@ -358,7 +452,9 @@
       .btn-minus:hover {
         background: rgba(255, 255, 255, 0.09);
       }
-
+      .btn-minus:active {
+        transform: scale(0.82);
+      }
       .btn-plus {
         background: linear-gradient(
           135deg,
@@ -372,13 +468,9 @@
         box-shadow: 0 3px 16px var(--red-glow);
         transform: scale(1.05);
       }
-
-      .btn-minus:active,
       .btn-plus:active {
-        transform: scale(0.88);
+        transform: scale(0.82);
       }
-
-      /* ===== TOTAL BAR ===== */
       .total-bar {
         background: var(--dark-card);
         border: 1px solid var(--border-red);
@@ -390,10 +482,8 @@
         margin-bottom: 14px;
         box-shadow:
           0 4px 24px rgba(0, 0, 0, 0.4),
-          inset 0 1px 0 rgba(255, 255, 255, 0.04),
-          inset 0 0 0 1px rgba(155, 26, 26, 0.08);
+          inset 0 1px 0 rgba(255, 255, 255, 0.04);
       }
-
       .total-label {
         font-size: 0.55rem;
         font-weight: 800;
@@ -402,7 +492,6 @@
         color: var(--text-muted);
         margin-bottom: 5px;
       }
-
       .total-amount {
         font-size: 1.85rem;
         font-weight: 800;
@@ -411,7 +500,6 @@
         font-variant-numeric: tabular-nums;
         letter-spacing: -0.5px;
       }
-
       .total-cups {
         font-size: 0.82rem;
         font-weight: 700;
@@ -419,8 +507,6 @@
         text-align: right;
         line-height: 1.7;
       }
-
-      /* ===== BUTTONS ===== */
       .btn-primary {
         width: 100%;
         padding: 15px;
@@ -446,8 +532,8 @@
         position: relative;
         overflow: hidden;
         margin-bottom: 10px;
+        touch-action: manipulation;
       }
-
       .btn-primary::before {
         content: "";
         position: absolute;
@@ -473,9 +559,7 @@
       }
       .btn-primary:active {
         transform: translateY(1px);
-        box-shadow: 0 2px 10px var(--red-glow);
       }
-
       .btn-ghost {
         width: 100%;
         padding: 9px;
@@ -489,12 +573,11 @@
         cursor: pointer;
         font-family: inherit;
         transition: color 0.2s;
+        touch-action: manipulation;
       }
       .btn-ghost:hover {
         color: var(--red-light);
       }
-
-      /* ===== MODAL ===== */
       #modal {
         position: fixed;
         inset: 0;
@@ -504,7 +587,6 @@
         display: none;
         animation: slideUp 0.28s ease;
       }
-
       @keyframes slideUp {
         from {
           transform: translateY(24px);
@@ -515,7 +597,6 @@
           opacity: 1;
         }
       }
-
       .modal-header {
         background: linear-gradient(
           155deg,
@@ -533,7 +614,6 @@
         position: relative;
         overflow: hidden;
       }
-
       .modal-header::before {
         content: "";
         position: absolute;
@@ -544,7 +624,6 @@
         top: -65px;
         right: -45px;
       }
-
       .report-subtitle {
         font-size: 0.58rem;
         letter-spacing: 5px;
@@ -553,14 +632,11 @@
         margin-top: 5px;
         font-weight: 600;
       }
-
       .modal-inner {
         max-width: 460px;
         margin: 0 auto;
         padding: 0 15px 48px;
       }
-
-      /* Report rows */
       .rep-row {
         display: grid;
         grid-template-columns: 1fr auto auto;
@@ -568,13 +644,11 @@
         align-items: center;
         padding: 10px 0;
         border-bottom: 1px solid var(--border);
-        transition: background 0.12s;
       }
       .rep-row:last-child {
         border-bottom: none;
         padding-bottom: 2px;
       }
-
       .rep-name {
         font-size: 0.78rem;
         font-weight: 600;
@@ -595,7 +669,6 @@
         white-space: nowrap;
         min-width: 82px;
       }
-
       .rep-zero .rep-name {
         opacity: 0.32;
       }
@@ -605,7 +678,6 @@
       .rep-zero .rep-subtotal {
         opacity: 0.18;
       }
-
       .summary-card {
         background: var(--dark-card);
         border: 1px solid var(--border-red);
@@ -614,26 +686,22 @@
         margin: 14px 0;
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
       }
-
       .summary-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 7px 0;
       }
-
       .summary-key {
         font-size: 0.72rem;
         color: var(--text-muted);
         font-weight: 600;
       }
-
       .summary-val {
         font-size: 0.95rem;
         font-weight: 800;
         color: var(--cream);
       }
-
       .divider {
         height: 1px;
         background: linear-gradient(
@@ -644,7 +712,6 @@
         );
         margin: 12px 0;
       }
-
       .net-label {
         font-size: 0.6rem;
         letter-spacing: 2.5px;
@@ -660,7 +727,6 @@
         letter-spacing: -0.5px;
         font-variant-numeric: tabular-nums;
       }
-
       .biaya-input {
         background: var(--dark-mid);
         border: 1px solid var(--border-red);
@@ -684,8 +750,6 @@
       .biaya-input::placeholder {
         color: var(--text-muted);
       }
-
-      /* Column header */
       .rep-col-header {
         display: grid;
         grid-template-columns: 1fr auto auto;
@@ -707,7 +771,6 @@
       .rep-col-label:last-child {
         min-width: 82px;
       }
-
       .btn-secondary {
         width: 100%;
         padding: 13px;
@@ -721,12 +784,12 @@
         font-family: inherit;
         margin-bottom: 10px;
         transition: all 0.2s;
+        touch-action: manipulation;
       }
       .btn-secondary:hover {
         background: rgba(255, 255, 255, 0.04);
         border-color: rgba(255, 255, 255, 0.18);
       }
-
       .sheets-cta {
         background: linear-gradient(135deg, #166534, #16a34a) !important;
         box-shadow:
@@ -738,11 +801,9 @@
           0 7px 28px rgba(22, 163, 74, 0.45),
           0 2px 0 #0f4621 !important;
       }
-
       .hidden {
         display: none !important;
       }
-
       ::-webkit-scrollbar {
         width: 3px;
       }
@@ -753,22 +814,6 @@
         background: var(--red-primary);
         border-radius: 3px;
       }
-
-      /* Subtle separator in sections */
-      .section-sep {
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          var(--red-primary),
-          var(--red-bright),
-          transparent
-        );
-        border-radius: 1px;
-        margin: 12px 0;
-        opacity: 0.55;
-      }
-
-      /* Category pill */
       .cat-pill {
         display: inline-block;
         font-size: 0.52rem;
@@ -782,10 +827,281 @@
         padding: 2px 7px;
         margin: 6px 0 10px;
       }
+
+      /* ===== PAYMENT POPUP ===== */
+      #payment-popup {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        animation: fadeIn 0.18s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .payment-sheet {
+        background: var(--dark-card);
+        border: 1px solid var(--border-red);
+        border-radius: 28px 28px 0 0;
+        padding: 28px 20px 42px;
+        width: 100%;
+        max-width: 460px;
+        animation: sheetUp 0.22s ease;
+      }
+      @keyframes sheetUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .payment-sheet-title {
+        font-size: 0.56rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 6px;
+      }
+      .payment-sheet-menu {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--cream);
+        text-align: center;
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+      .payment-sheet-price {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--red-light);
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .pay-method-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .pay-method-btn {
+        padding: 18px 10px;
+        border-radius: var(--radius-md);
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        font-family: inherit;
+        font-size: 0.88rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        background: var(--dark-mid);
+        color: var(--text-sub);
+      }
+      .pay-method-btn .pay-icon {
+        font-size: 2rem;
+        line-height: 1;
+      }
+      .pay-method-btn:active {
+        transform: scale(0.91);
+      }
+      .pay-method-btn.active-cash {
+        background: linear-gradient(135deg, #92400e, #d97706);
+        color: #fff;
+        border-color: #f59e0b;
+        box-shadow:
+          0 4px 20px rgba(217, 119, 6, 0.45),
+          0 2px 0 #78350f;
+      }
+      .pay-method-btn.active-qris {
+        background: linear-gradient(135deg, #1e3a5f, #2563eb);
+        color: #fff;
+        border-color: #60a5fa;
+        box-shadow:
+          0 4px 20px rgba(37, 99, 235, 0.45),
+          0 2px 0 #1e3a5f;
+      }
+      .pay-confirm-btn {
+        width: 100%;
+        padding: 17px;
+        border: none;
+        border-radius: var(--radius-md);
+        font-family: inherit;
+        font-size: 0.88rem;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        cursor: pointer;
+        touch-action: manipulation;
+        transition: all 0.18s ease;
+        margin-bottom: 10px;
+      }
+      .pay-confirm-btn:disabled {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text-muted);
+        cursor: not-allowed;
+        box-shadow: none;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+      }
+      .pay-confirm-btn.ready-cash {
+        background: linear-gradient(135deg, #92400e, #d97706);
+        color: #fff;
+        box-shadow:
+          0 5px 20px rgba(217, 119, 6, 0.45),
+          0 2px 0 #78350f;
+      }
+      .pay-confirm-btn.ready-qris {
+        background: linear-gradient(135deg, #1e3a5f, #2563eb);
+        color: #fff;
+        box-shadow:
+          0 5px 20px rgba(37, 99, 235, 0.45),
+          0 2px 0 #1e3a5f;
+      }
+      .pay-confirm-btn:not(:disabled):active {
+        transform: scale(0.95);
+      }
+      .payment-btn-cancel {
+        width: 100%;
+        padding: 12px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        touch-action: manipulation;
+      }
+      .payment-btn-cancel:hover {
+        color: var(--red-light);
+        border-color: var(--red-light);
+      }
+
+      /* Badge */
+      .payment-badges {
+        display: flex;
+        gap: 5px;
+        margin-top: 4px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        font-size: 0.5rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        padding: 2px 7px;
+        border-radius: 5px;
+        text-transform: uppercase;
+      }
+      .badge-cash {
+        background: rgba(217, 119, 6, 0.18);
+        color: #d97706;
+        border: 1px solid rgba(217, 119, 6, 0.3);
+      }
+      .badge-qris {
+        background: rgba(37, 99, 235, 0.18);
+        color: #60a5fa;
+        border: 1px solid rgba(37, 99, 235, 0.3);
+      }
+
+      /* Ringkasan pembayaran */
+      .pay-summary-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 12px 0;
+      }
+      .pay-summary-item {
+        background: var(--dark-mid);
+        border-radius: var(--radius-sm);
+        padding: 13px 14px;
+        border: 1px solid var(--border);
+      }
+      .pay-summary-label {
+        font-size: 0.52rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+      }
+      .pay-summary-label-cash {
+        color: #d97706;
+      }
+      .pay-summary-label-qris {
+        color: #60a5fa;
+      }
+      .pay-summary-val {
+        font-size: 0.92rem;
+        font-weight: 800;
+        color: var(--cream);
+      }
+      .pay-summary-sub {
+        font-size: 0.58rem;
+        color: var(--text-muted);
+        margin-top: 3px;
+        font-weight: 600;
+      }
+
+      /* Deduct rows */
+      .summary-row-deduct .summary-key {
+        color: #fca5a5;
+      }
+      .summary-row-deduct .summary-val {
+        color: #fca5a5;
+      }
+
+      /* Gaji driver highlight row */
+      .gaji-driver-row {
+        background: rgba(74, 222, 128, 0.04);
+        border: 1px solid rgba(74, 222, 128, 0.12);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        margin: 10px 0 6px;
+      }
+      .gaji-driver-row .summary-key {
+        color: rgba(74, 222, 128, 0.7);
+        font-weight: 700;
+      }
+      .gaji-driver-row .summary-val {
+        color: #fca5a5;
+      }
     </style>
   </head>
   <body>
-    <!-- HEADER -->
+    <!-- ===== SPLASH SCREEN ===== -->
+    <div id="splash">
+      <div class="splash-logo">TĀJIR</div>
+      <div class="splash-tagline">by: bilhudã</div>
+      <div class="splash-welcome">Selamat Datang di Kasir TĀJIR</div>
+      <div class="splash-dots">
+        <div class="splash-dot"></div>
+        <div class="splash-dot"></div>
+        <div class="splash-dot"></div>
+      </div>
+    </div>
+
     <div class="header">
       <div class="header-deco"></div>
       <div class="logo-text">TĀJIR</div>
@@ -794,7 +1110,6 @@
     </div>
 
     <div class="container">
-      <!-- TABS -->
       <div class="tabs">
         <button onclick="showTab('stok')" id="btn-stok" class="tab-btn active">
           📦 Stok
@@ -804,7 +1119,6 @@
         </button>
       </div>
 
-      <!-- SECTION STOK -->
       <div id="section-stok">
         <div class="card">
           <div class="card-title">Input Stok</div>
@@ -815,13 +1129,11 @@
         </button>
       </div>
 
-      <!-- SECTION JUAL -->
       <div id="section-jual" class="hidden">
         <div class="card">
           <div class="card-title">Menu Penjualan</div>
           <div id="jual-container"></div>
         </div>
-
         <div class="total-bar">
           <div>
             <div class="total-label">Total Laku</div>
@@ -832,7 +1144,6 @@
             <div id="sisa-stok" class="total-cups">Sisa: 0 Cup</div>
           </div>
         </div>
-
         <button onclick="generateReport()" class="btn-primary">
           📊 Lihat Laporan
         </button>
@@ -846,7 +1157,6 @@
         <div class="logo-text">TĀJIR</div>
         <div class="report-subtitle">Laporan Akhir Hari</div>
       </div>
-
       <div class="modal-inner">
         <div class="card">
           <div class="card-title">Detail Penjualan</div>
@@ -858,13 +1168,38 @@
           <div id="report-items"></div>
         </div>
 
+        <div class="card">
+          <div class="card-title">Ringkasan Pembayaran</div>
+          <div class="pay-summary-grid">
+            <div class="pay-summary-item">
+              <div class="pay-summary-label pay-summary-label-cash">
+                💵 Cash
+              </div>
+              <div id="rep-total-cash" class="pay-summary-val">Rp 0</div>
+              <div id="rep-cup-cash" class="pay-summary-sub">0 transaksi</div>
+            </div>
+            <div class="pay-summary-item">
+              <div class="pay-summary-label pay-summary-label-qris">
+                📱 QRIS
+              </div>
+              <div id="rep-total-qris" class="pay-summary-val">Rp 0</div>
+              <div id="rep-cup-qris" class="pay-summary-sub">0 transaksi</div>
+            </div>
+          </div>
+        </div>
+
         <div class="summary-card">
           <div class="summary-row">
             <span class="summary-key">Total Pendapatan Kotor</span>
             <span id="rep-gross" class="summary-val"></span>
           </div>
+          <div class="summary-row">
+            <span class="summary-key">Total Cup Terjual</span>
+            <span id="rep-total-cup" class="summary-val"></span>
+          </div>
           <div class="divider"></div>
 
+          <!-- Biaya Operasional -->
           <label
             style="
               font-size: 0.62rem;
@@ -875,40 +1210,39 @@
               display: block;
               margin-bottom: 8px;
             "
+            >💼 Pengeluaran / Biaya Operasional</label
           >
-            Biaya / Modal
-          </label>
           <input
             type="number"
             id="biaya"
-            placeholder="Masukkan biaya operasional..."
+            placeholder="Masukkan total biaya operasional..."
             class="biaya-input"
             oninput="calcNet()"
           />
-
-          <!-- === TAMBAHAN: Input Pengeluaran Tambahan === -->
-          <label
-            style="
-              font-size: 0.62rem;
-              font-weight: 700;
-              color: var(--text-muted);
-              letter-spacing: 2px;
-              text-transform: uppercase;
-              display: block;
-              margin-top: 14px;
-              margin-bottom: 8px;
-            "
+          <div
+            class="summary-row summary-row-deduct"
+            style="margin-top: 4px; margin-bottom: 4px"
           >
-            Pengeluaran Tambahan
-          </label>
-          <input
-            type="number"
-            id="pengeluaranTambahan"
-            placeholder="Masukkan pengeluaran tambahan..."
-            class="biaya-input"
-            oninput="calcNet()"
-          />
-          <!-- === AKHIR TAMBAHAN: Input Pengeluaran Tambahan === -->
+            <span class="summary-key">Biaya Operasional</span>
+            <span
+              id="rep-biaya-display"
+              class="summary-val"
+              style="color: #fca5a5"
+              >−Rp 0</span
+            >
+          </div>
+
+          <!-- Gaji Driver -->
+          <div class="gaji-driver-row summary-row">
+            <span class="summary-key">
+              🛵 Gaji Driver&nbsp;
+              <span
+                id="rep-driver-info"
+                style="opacity: 0.6; font-size: 0.63rem; font-weight: 600"
+              ></span>
+            </span>
+            <span id="rep-gaji-driver" class="summary-val"></span>
+          </div>
 
           <div class="divider"></div>
           <div class="net-label">Profit Bersih</div>
@@ -922,10 +1256,52 @@
       </div>
     </div>
 
+    <!-- PAYMENT POPUP -->
+    <div id="payment-popup" class="hidden">
+      <div class="payment-sheet">
+        <div class="payment-sheet-title">Pilih Metode Bayar</div>
+        <div id="popup-menu-name" class="payment-sheet-menu"></div>
+        <div id="popup-menu-price" class="payment-sheet-price"></div>
+        <div class="pay-method-bar">
+          <button
+            class="pay-method-btn"
+            id="btn-method-cash"
+            onclick="selectMethod('cash')"
+          >
+            <span class="pay-icon">💵</span>CASH
+          </button>
+          <button
+            class="pay-method-btn"
+            id="btn-method-qris"
+            onclick="selectMethod('qris')"
+          >
+            <span class="pay-icon">📱</span>QRIS
+          </button>
+        </div>
+        <button
+          class="pay-confirm-btn"
+          id="btn-confirm-pay"
+          onclick="confirmPayment()"
+          disabled
+        >
+          Pilih metode dulu
+        </button>
+        <button class="payment-btn-cancel" onclick="closePaymentPopup()">
+          ✕ Batal
+        </button>
+      </div>
+    </div>
+
     <script>
       // ============================================================
-      // TAJIR COFFEE — FINAL FIX (Sheets + Bug Fix + Pengeluaran Tambahan)
+      // TAJIR COFFEE — v5 | Splash + Gaji Driver + Biaya + Sheets
       // ============================================================
+
+      // ✅ URL Google Apps Script (diperbarui sesuai permintaan)
+      const APPS_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbyf8GyY4gDvfMkVfijwelYlRyGKaibV0A2V7kFMONV5KH4gE4bQss-XoYDCRYH2Csy-/exec";
+
+      const GAJI_DRIVER_PER_CUP = 1500;
 
       const MENUS = [
         { id: "lb", name: "Longblack Tajir", price: 10000, cat: "coffee" },
@@ -939,20 +1315,49 @@
         { id: "br", name: "Brown Tajir", price: 13000, cat: "non" },
       ];
 
+      // ===== SPLASH — hanya muncul sekali =====
+      (function initSplash() {
+        const splash = document.getElementById("splash");
+        const shown = localStorage.getItem("tajir_splash_shown");
+        if (shown) {
+          // Sudah pernah dibuka → sembunyikan langsung tanpa animasi
+          splash.style.display = "none";
+        } else {
+          // Pertama kali → tampilkan, lalu tandai & sembunyikan setelah animasi selesai
+          localStorage.setItem("tajir_splash_shown", "1");
+          // Animasi CSS akan otomatis fadeOut setelah 3 detik (2.4s delay + 0.6s duration)
+          setTimeout(() => {
+            splash.style.display = "none";
+          }, 3100);
+        }
+      })();
+
+      // ===== DATABASE =====
       function defaultDb() {
         const stok = {},
-          jual = {};
+          jual = {},
+          payments = {};
         MENUS.forEach((m) => {
           stok[m.id] = 0;
           jual[m.id] = 0;
+          payments[m.id] = { cash: 0, qris: 0 };
         });
-        return { stok, jual };
+        return { stok, jual, payments };
       }
 
       function loadDb() {
         try {
           const raw = localStorage.getItem("tajir_v4");
-          if (raw) return JSON.parse(raw);
+          if (raw) {
+            const p = JSON.parse(raw);
+            if (!p.payments) {
+              p.payments = {};
+              MENUS.forEach((m) => {
+                p.payments[m.id] = { cash: 0, qris: 0 };
+              });
+            }
+            return p;
+          }
         } catch {}
         return defaultDb();
       }
@@ -968,33 +1373,53 @@
         return "Rp " + n.toLocaleString("id-ID");
       }
 
+      // ===== KALKULASI =====
       function getTotalCash() {
-        return MENUS.reduce(
-          (sum, m) => sum + (db.jual[m.id] || 0) * m.price,
-          0,
-        );
+        return MENUS.reduce((s, m) => s + (db.jual[m.id] || 0) * m.price, 0);
       }
-
       function getTotalJual() {
         return MENUS.reduce((s, m) => s + (db.jual[m.id] || 0), 0);
       }
-
       function getTotalSisa() {
-        return MENUS.reduce((s, m) => {
-          return s + Math.max(0, (db.stok[m.id] || 0) - (db.jual[m.id] || 0));
-        }, 0);
+        return MENUS.reduce(
+          (s, m) =>
+            s + Math.max(0, (db.stok[m.id] || 0) - (db.jual[m.id] || 0)),
+          0,
+        );
+      }
+      function getTotalCashRp() {
+        return MENUS.reduce(
+          (s, m) => s + (db.payments[m.id].cash || 0) * m.price,
+          0,
+        );
+      }
+      function getTotalQrisRp() {
+        return MENUS.reduce(
+          (s, m) => s + (db.payments[m.id].qris || 0) * m.price,
+          0,
+        );
+      }
+      function getTotalCashCup() {
+        return MENUS.reduce((s, m) => s + (db.payments[m.id].cash || 0), 0);
+      }
+      function getTotalQrisCup() {
+        return MENUS.reduce((s, m) => s + (db.payments[m.id].qris || 0), 0);
+      }
+      function getGajiDriver() {
+        return getTotalJual() * GAJI_DRIVER_PER_CUP;
       }
 
-      function getTotalStok() {
-        return MENUS.reduce((s, m) => s + (db.stok[m.id] || 0), 0);
+      // profit = total_cash - biaya - gaji_driver
+      function getProfitBersih(biaya) {
+        return getTotalCash() - (biaya || 0) - getGajiDriver();
       }
 
-      // Clock
+      // ===== CLOCK =====
       function updateClock() {
         const now = new Date();
-        const h = String(now.getHours()).padStart(2, "0");
-        const min = String(now.getMinutes()).padStart(2, "0");
-        const sec = String(now.getSeconds()).padStart(2, "0");
+        const h = String(now.getHours()).padStart(2, "0"),
+          min = String(now.getMinutes()).padStart(2, "0"),
+          sec = String(now.getSeconds()).padStart(2, "0");
         const d = now.toLocaleDateString("id-ID", {
           weekday: "long",
           day: "numeric",
@@ -1012,89 +1437,84 @@
         updateTotal();
       }
 
+      // ===== STOK =====
       function renderStok() {
         const c = document.getElementById("stok-container");
-
-        // Group by category
-        const coffeeItems = MENUS.filter((m) => m.cat === "coffee");
-        const nonItems = MENUS.filter((m) => m.cat === "non");
-
-        function buildRows(items) {
-          return items
+        const buildRows = (items) =>
+          items
             .map(
               (m) => `
-                <div class="stok-row">
-                <div>
-                    <div class="stok-name">${m.name}</div>
-                    <div class="stok-price">${fmt(m.price)}</div>
-                </div>
-                <input type="number" value="${db.stok[m.id]}"
-                    class="qty-input"
-                    oninput="setStok('${m.id}', this.value)">
-                </div>
-            `,
+            <div class="stok-row">
+              <div>
+                <div class="stok-name">${m.name}</div>
+                <div class="stok-price">${fmt(m.price)}</div>
+              </div>
+              <input type="number" value="${db.stok[m.id]}" class="qty-input"
+                oninput="setStok('${m.id}', this.value)">
+            </div>`,
             )
             .join("");
-        }
-
-        c.innerHTML = `
-            <div class="cat-pill">☕ Coffee</div>
-            ${buildRows(coffeeItems)}
-            <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
-            ${buildRows(nonItems)}
-            `;
+        c.innerHTML =
+          `<div class="cat-pill">☕ Coffee</div>` +
+          buildRows(MENUS.filter((m) => m.cat === "coffee")) +
+          `<div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>` +
+          buildRows(MENUS.filter((m) => m.cat === "non"));
       }
 
       function setStok(id, val) {
         db.stok[id] = Math.max(0, parseInt(val) || 0);
-        if (db.stok[id] < db.jual[id]) db.jual[id] = db.stok[id];
+        if (db.stok[id] < db.jual[id]) {
+          db.jual[id] = db.stok[id];
+          db.payments[id] = { cash: 0, qris: 0 };
+        }
         save();
       }
 
+      // ===== JUAL =====
       function renderJual() {
         const c = document.getElementById("jual-container");
-
-        // Group by category
-        const coffeeItems = MENUS.filter((m) => m.cat === "coffee");
-        const nonItems = MENUS.filter((m) => m.cat === "non");
-
-        function buildRows(items) {
-          return items
+        const buildRows = (items) =>
+          items
             .map((m) => {
               const laku = db.jual[m.id];
               const sisa = Math.max(0, db.stok[m.id] - laku);
-              const id = m.id;
+              const cc = db.payments[m.id].cash || 0,
+                qc = db.payments[m.id].qris || 0;
+              const badges =
+                cc > 0 || qc > 0
+                  ? `<div class="payment-badges">
+                  ${cc > 0 ? `<span class="badge badge-cash">💵 ${cc}</span>` : ""}
+                  ${qc > 0 ? `<span class="badge badge-qris">📱 ${qc}</span>` : ""}
+                </div>`
+                  : "";
               return `
-                <div class="jual-row">
-                    <div>
-                    <div class="jual-name">${m.name}</div>
-                    <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
-                    </div>
-                    <div class="counter">
-                    <button class="btn-minus" onclick="adj('${id}',-1)">−</button>
-                    <span class="counter-val">${laku}</span>
-                    <button class="btn-plus" onclick="adj('${id}',1)">+</button>
-                    </div>
+              <div class="jual-row">
+                <div>
+                  <div class="jual-name">${m.name}</div>
+                  <div class="jual-meta">${fmt(m.price)} · Sisa: ${sisa}</div>
+                  ${badges}
                 </div>
-                `;
+                <div class="counter">
+                  <button class="btn-minus" onclick="adjMinus('${m.id}')">−</button>
+                  <span class="counter-val" id="cv-${m.id}">${laku}</span>
+                  <button class="btn-plus" onclick="openPaymentPopup('${m.id}')">+</button>
+                </div>
+              </div>`;
             })
             .join("");
-        }
-
-        c.innerHTML = `
-            <div class="cat-pill">☕ Coffee</div>
-            ${buildRows(coffeeItems)}
-            <div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>
-            ${buildRows(nonItems)}
-            `;
+        c.innerHTML =
+          `<div class="cat-pill">☕ Coffee</div>` +
+          buildRows(MENUS.filter((m) => m.cat === "coffee")) +
+          `<div class="cat-pill" style="margin-top:14px">🧋 Non-Coffee</div>` +
+          buildRows(MENUS.filter((m) => m.cat === "non"));
       }
 
-      function adj(id, val) {
-        if (val > 0 && db.jual[id] >= db.stok[id]) {
-          alert("Stok habis!");
-          return;
-        }
-        db.jual[id] = Math.max(0, db.jual[id] + val);
+      function adjMinus(id) {
+        if (db.jual[id] <= 0) return;
+        db.jual[id]--;
+        const p = db.payments[id];
+        if (p.qris > 0) p.qris--;
+        else if (p.cash > 0) p.cash--;
         save();
         renderJual();
       }
@@ -1123,27 +1543,99 @@
         if (t === "jual") renderJual();
       }
 
+      // ===== PAYMENT POPUP =====
+      let _pendingId = null,
+        _selectedMethod = null;
+
+      function openPaymentPopup(id) {
+        if (db.jual[id] >= db.stok[id]) {
+          alert("Stok habis!");
+          return;
+        }
+        _pendingId = id;
+        _selectedMethod = null;
+        const menu = MENUS.find((m) => m.id === id);
+        document.getElementById("popup-menu-name").innerText = menu.name;
+        document.getElementById("popup-menu-price").innerText = fmt(menu.price);
+        document.getElementById("btn-method-cash").className = "pay-method-btn";
+        document.getElementById("btn-method-qris").className = "pay-method-btn";
+        const cb = document.getElementById("btn-confirm-pay");
+        cb.className = "pay-confirm-btn";
+        cb.disabled = true;
+        cb.innerText = "Pilih metode dulu";
+        document.getElementById("payment-popup").classList.remove("hidden");
+      }
+
+      function selectMethod(method) {
+        _selectedMethod = method;
+        document.getElementById("btn-method-cash").className =
+          "pay-method-btn" + (method === "cash" ? " active-cash" : "");
+        document.getElementById("btn-method-qris").className =
+          "pay-method-btn" + (method === "qris" ? " active-qris" : "");
+        const cb = document.getElementById("btn-confirm-pay");
+        cb.disabled = false;
+        cb.className =
+          "pay-confirm-btn " +
+          (method === "cash" ? "ready-cash" : "ready-qris");
+        cb.innerText = "✓ Konfirmasi — " + method.toUpperCase();
+      }
+
+      function confirmPayment() {
+        if (!_pendingId || !_selectedMethod) return;
+        const id = _pendingId,
+          method = _selectedMethod;
+        closePaymentPopup();
+        db.jual[id] = (db.jual[id] || 0) + 1;
+        db.payments[id][method] = (db.payments[id][method] || 0) + 1;
+        save();
+        const el = document.getElementById("cv-" + id);
+        if (el) {
+          el.classList.add("bump");
+          setTimeout(() => el.classList.remove("bump"), 200);
+        }
+        renderJual();
+      }
+
+      function closePaymentPopup() {
+        document.getElementById("payment-popup").classList.add("hidden");
+        _pendingId = null;
+        _selectedMethod = null;
+      }
+
+      // ===== LAPORAN =====
       function generateReport() {
         const gross = getTotalCash();
-        document.getElementById("rep-gross").innerText = fmt(gross);
-        document.getElementById("rep-net").innerText = fmt(gross);
-        document.getElementById("biaya").value = "";
+        const totalCup = getTotalJual();
+        const gajiDriver = getGajiDriver();
 
-        // === TAMBAHAN: Reset input pengeluaran tambahan saat laporan dibuka ===
-        document.getElementById("pengeluaranTambahan").value = "";
-        // === AKHIR TAMBAHAN ===
+        document.getElementById("rep-gross").innerText = fmt(gross);
+        document.getElementById("rep-total-cup").innerText = totalCup + " Cup";
+        document.getElementById("rep-gaji-driver").innerText =
+          "−" + fmt(gajiDriver);
+        document.getElementById("rep-driver-info").innerText =
+          `(${totalCup} cup × Rp 1.500)`;
+        document.getElementById("biaya").value = "";
+        document.getElementById("rep-biaya-display").innerText = "−Rp 0";
+        document.getElementById("rep-net").innerText = fmt(gross - gajiDriver);
+
+        document.getElementById("rep-total-cash").innerText =
+          fmt(getTotalCashRp());
+        document.getElementById("rep-total-qris").innerText =
+          fmt(getTotalQrisRp());
+        document.getElementById("rep-cup-cash").innerText =
+          getTotalCashCup() + " transaksi";
+        document.getElementById("rep-cup-qris").innerText =
+          getTotalQrisCup() + " transaksi";
 
         document.getElementById("report-items").innerHTML = MENUS.map((m) => {
-          const laku = db.jual[m.id];
-          const subtotal = laku * m.price;
-          const isZero = laku === 0;
-          return `
-                <div class="rep-row${isZero ? " rep-zero" : ""}">
-                <span class="rep-name">${m.name}</span>
-                <span class="rep-qty">${laku} cup</span>
-                <span class="rep-subtotal">${fmt(subtotal)}</span>
-                </div>
-            `;
+          const laku = db.jual[m.id],
+            subtotal = laku * m.price,
+            isZero = laku === 0;
+          return `<div class="rep-row${isZero ? " rep-zero" : ""}">
+            <span class="rep-name">${m.name}</span>
+            <span class="rep-qty">${laku} cup</span>
+            <span class="rep-subtotal">${fmt(subtotal)}</span>
+          </div>`;
         }).join("");
 
         document.getElementById("modal").style.display = "block";
@@ -1154,23 +1646,15 @@
         document.getElementById("modal").style.display = "none";
       }
 
-      // === TAMBAHAN: calcNet diupdate untuk menghitung pengeluaran tambahan ===
+      // calcNet: profit = total_cash - biaya - gaji_driver
       function calcNet() {
         const biaya = parseInt(document.getElementById("biaya").value) || 0;
-
-        // Ambil nilai pengeluaran tambahan dari input baru
-        const pengeluaranTambahan =
-          parseInt(document.getElementById("pengeluaranTambahan").value) || 0;
-
-        // Total pengeluaran = biaya modal + pengeluaran tambahan
-        const totalPengeluaran = biaya + pengeluaranTambahan;
-
-        const gross = getTotalCash();
-
-        // Profit bersih = pendapatan kotor - total pengeluaran
-        document.getElementById("rep-net").innerText = fmt(gross - totalPengeluaran);
+        document.getElementById("rep-biaya-display").innerText =
+          "−" + fmt(biaya);
+        document.getElementById("rep-net").innerText = fmt(
+          getProfitBersih(biaya),
+        );
       }
-      // === AKHIR TAMBAHAN: calcNet ===
 
       function resetApp() {
         if (!confirm("Yakin hapus semua data hari ini?")) return;
@@ -1178,74 +1662,52 @@
         location.reload();
       }
 
-      // ================= GOOGLE SHEETS =================
-      function getSheetsUrl() {
-        return "https://script.google.com/macros/s/AKfycbwmG8gAJShnQySAMKbeP7GWngS_OHJXqyWMmdsFU7NqxI_uNgxRV9EcBWnCd4q_91gfQg/exec";
-      }
-
-      let sending = false;
-
-      // === TAMBAHAN: kirimSheets diupdate — urutan kolom baru + pengeluaran tambahan ===
+      // ===== GOOGLE SHEETS =====
+      // Kolom: [tanggal, lb, bp, sg, hz, ca, ar, ma, rv, br,
+      //         total_cup, total_pendapatan, total_cash, total_qris,
+      //         biaya, gaji_driver, profit_bersih]
       function kirimSheets() {
-        if (sending) {
-          alert("⏳ Data sedang dikirim, tunggu sebentar...");
-          return;
-        }
-        sending = true;
-
-        // URL tidak diubah
-        const url =
-          "https://script.google.com/macros/s/AKfycbwmG8gAJShnQySAMKbeP7GWngS_OHJXqyWMmdsFU7NqxI_uNgxRV9EcBWnCd4q_91gfQg/exec";
-
         const biaya = parseInt(document.getElementById("biaya").value) || 0;
 
-        // Ambil pengeluaran tambahan dari input baru
-        const pengeluaranTambahan =
-          parseInt(document.getElementById("pengeluaranTambahan").value) || 0;
+        const tanggal = new Date().toLocaleString("id-ID", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
 
-        // Total pengeluaran = biaya modal + pengeluaran tambahan
-        const totalPengeluaran = biaya + pengeluaranTambahan;
-
-        const gross = getTotalCash();
-
-        // Profit = total pendapatan - total pengeluaran (sudah termasuk pengeluaran tambahan)
-        const profit = gross - totalPengeluaran;
-
-        const tanggal = new Date().toLocaleString("id-ID");
-        const totalCup = getTotalJual();
-
-        // Urutan kolom sesuai format Google Sheets yang diminta:
-        // [ tanggal, qty_longblack, qty_blackpeach, qty_sanger, qty_hazelnut,
-        //   qty_caramel, qty_aren, qty_matcha, qty_redvelvet, qty_brown,
-        //   total_cup, total_pendapatan, total_pengeluaran, profit ]
-        const menuQtys = MENUS.map((m) => db.jual[m.id] || 0);
         const row = [
-          tanggal,          // Tanggal
-          ...menuQtys,      // qty per menu (sesuai urutan array MENUS)
-          totalCup,         // Total Cup
-          gross,            // Total Pendapatan Kotor
-          totalPengeluaran, // Total Pengeluaran (biaya + pengeluaranTambahan)
-          profit,           // Profit Bersih
+          tanggal,
+          ...MENUS.map((m) => db.jual[m.id] || 0), // lb, bp, sg, hz, ca, ar, ma, rv, br
+          getTotalJual(), // total_cup
+          getTotalCash(), // total_pendapatan
+          getTotalCashRp(), // total_cash (uang cash)
+          getTotalQrisRp(), // total_qris
+          biaya, // biaya
+          getGajiDriver(), // gaji_driver
+          getProfitBersih(biaya), // profit_bersih
         ];
 
-        fetch(url, {
+        console.log("DATA YANG DIKIRIM:", row);
+
+        fetch(APPS_SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify({ data: [row] }),
           headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ data: row }),
         })
-          .then((res) => res.text())
-          .then(() => {
-            alert("✅ Berhasil kirim ke Sheets");
-            sending = false;
+          .then(async (res) => {
+            const text = await res.text();
+            console.log("RESPON SERVER:", text);
+            alert(text);
           })
-          .catch(() => {
-            alert("❌ Gagal kirim");
-            sending = false;
+          .catch((err) => {
+            console.error("ERROR FETCH:", err);
+            alert("Gagal konek: " + err.message);
           });
       }
-      // === AKHIR TAMBAHAN: kirimSheets ===
 
-      // INIT
       init();
     </script>
   </body>
