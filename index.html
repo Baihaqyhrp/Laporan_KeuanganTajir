@@ -269,6 +269,25 @@
         position: relative;
         z-index: 1;
       }
+      .popup-qty {
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border-red);
+  background: var(--dark-mid);
+  color: var(--cream);
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.popup-qty:focus {
+  border-color: var(--red-primary);
+  box-shadow: 0 0 0 2px var(--red-glow);
+}
       .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1338,6 +1357,19 @@
         <div class="payment-sheet-title">Pilih Metode Bayar</div>
         <div id="popup-menu-name" class="payment-sheet-menu"></div>
         <div id="popup-menu-price" class="payment-sheet-price"></div>
+        <div class="payment-sheet">
+  <div class="payment-sheet-title">Pilih Metode Bayar</div>
+  <div id="popup-menu-name" class="payment-sheet-menu"></div>
+  <div id="popup-menu-price" class="payment-sheet-price"></div>
+<div style="font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; text-align:center;">
+  Jumlah Cup
+</div>
+
+<input type="number" id="popup-qty" min="1" value="1" class="popup-qty" />
+  <!-- ✅ TAMBAHKAN DI SINI -->
+
+
+  <div class="pay-method-bar">
         <div class="pay-method-bar">
           <button
             class="pay-method-btn"
@@ -1623,24 +1655,34 @@
       let _pendingId = null,
         _selectedMethod = null;
 
-      function openPaymentPopup(id) {
-        if (db.jual[id] >= db.stok[id]) {
-          alert("Stok habis!");
-          return;
-        }
-        _pendingId = id;
-        _selectedMethod = null;
-        const menu = MENUS.find((m) => m.id === id);
-        document.getElementById("popup-menu-name").innerText = menu.name;
-        document.getElementById("popup-menu-price").innerText = fmt(menu.price);
-        document.getElementById("btn-method-cash").className = "pay-method-btn";
-        document.getElementById("btn-method-qris").className = "pay-method-btn";
-        const cb = document.getElementById("btn-confirm-pay");
-        cb.className = "pay-confirm-btn";
-        cb.disabled = true;
-        cb.innerText = "Pilih metode dulu";
-        document.getElementById("payment-popup").classList.remove("hidden");
-      }
+   function openPaymentPopup(id) {
+  if (db.jual[id] >= db.stok[id]) {
+    alert("Stok habis!");
+    return;
+  }
+
+  _pendingId = id;
+  _selectedMethod = null;
+
+  const menu = MENUS.find((m) => m.id === id);
+
+  document.getElementById("popup-menu-name").innerText = menu.name;
+  document.getElementById("popup-menu-price").innerText = fmt(menu.price);
+
+  // ✅ SET DEFAULT QTY
+  const qtyInput = document.getElementById("popup-qty");
+  if (qtyInput) qtyInput.value = 1;
+
+  document.getElementById("btn-method-cash").className = "pay-method-btn";
+  document.getElementById("btn-method-qris").className = "pay-method-btn";
+
+  const cb = document.getElementById("btn-confirm-pay");
+  cb.className = "pay-confirm-btn";
+  cb.disabled = true;
+  cb.innerText = "Pilih metode dulu";
+
+  document.getElementById("payment-popup").classList.remove("hidden");
+}
 
       function selectMethod(method) {
         _selectedMethod = method;
@@ -1657,20 +1699,44 @@
       }
 
       function confirmPayment() {
-        if (!_pendingId || !_selectedMethod) return;
-        const id = _pendingId,
-          method = _selectedMethod;
-        closePaymentPopup();
-        db.jual[id] = (db.jual[id] || 0) + 1;
-        db.payments[id][method] = (db.payments[id][method] || 0) + 1;
-        save();
-        const el = document.getElementById("cv-" + id);
-        if (el) {
-          el.classList.add("bump");
-          setTimeout(() => el.classList.remove("bump"), 200);
-        }
-        renderJual();
-      }
+  if (!_pendingId || !_selectedMethod) return;
+
+  const id = _pendingId;
+  const method = _selectedMethod;
+
+  const qtyInput = document.getElementById("popup-qty");
+  let qty = parseInt(qtyInput.value) || 0;
+
+  const sisa = db.stok[id] - db.jual[id];
+
+  // ✅ VALIDASI
+  if (qty < 1) {
+    alert("Minimal 1");
+    return;
+  }
+
+  if (qty > sisa) {
+    alert("Stok tidak mencukupi");
+    return;
+  }
+
+  closePaymentPopup();
+
+  // ✅ TAMBAH SESUAI QTY
+  db.jual[id] = (db.jual[id] || 0) + qty;
+  db.payments[id][method] =
+    (db.payments[id][method] || 0) + qty;
+
+  save();
+
+  const el = document.getElementById("cv-" + id);
+  if (el) {
+    el.classList.add("bump");
+    setTimeout(() => el.classList.remove("bump"), 200);
+  }
+
+  renderJual();
+}
 
       function closePaymentPopup() {
         document.getElementById("payment-popup").classList.add("hidden");
