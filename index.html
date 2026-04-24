@@ -1176,6 +1176,25 @@
   color: #fff;
   opacity: 0.9;
 }
+
+      /* ===== POPUP SECTION DIVIDER ===== */
+      .popup-section {
+        margin-bottom: 20px;
+      }
+      .popup-section-label {
+        font-size: 0.56rem;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .popup-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--border-red), transparent);
+        margin: 6px 0 20px;
+      }
     </style>
   </head>
   <body>
@@ -1354,49 +1373,58 @@
     <!-- PAYMENT POPUP -->
     <div id="payment-popup" class="hidden">
       <div class="payment-sheet">
-        <div class="payment-sheet-title">Pilih Metode Bayar</div>
-        <div id="popup-menu-name" class="payment-sheet-menu"></div>
-        <div id="popup-menu-price" class="payment-sheet-price"></div>
-        <div class="payment-sheet">
-  <div class="payment-sheet-title">Pilih Metode Bayar</div>
-  <div id="popup-menu-name" class="payment-sheet-menu"></div>
-  <div id="popup-menu-price" class="payment-sheet-price"></div>
-<div style="font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; text-align:center;">
-  Jumlah Cup
-</div>
 
-<input type="number" id="popup-qty" min="1" value="1" class="popup-qty" />
-  <!-- ✅ TAMBAHKAN DI SINI -->
+        <!-- Info menu (judul + harga) -->
+        <div class="popup-section" style="margin-bottom: 4px;">
+          <div class="payment-sheet-title">Pilih Metode Bayar</div>
+          <div id="popup-menu-name" class="payment-sheet-menu"></div>
+          <div id="popup-menu-price" class="payment-sheet-price"></div>
+        </div>
 
+        <!-- 1. Jumlah Cup -->
+        <div class="popup-section">
+          <div class="popup-section-label">Jumlah Cup</div>
+          <input type="number" id="popup-qty" min="1" value="1" class="popup-qty" />
+        </div>
 
-  <div class="pay-method-bar">
-        <div class="pay-method-bar">
+        <!-- 2. Metode Pembayaran -->
+        <div class="popup-section">
+          <div class="popup-section-label">Metode Pembayaran</div>
+          <div class="pay-method-bar">
+            <button
+              class="pay-method-btn"
+              id="btn-method-cash"
+              onclick="selectMethod('cash')"
+            >
+              <span class="pay-icon">💵</span>CASH
+            </button>
+            <button
+              class="pay-method-btn"
+              id="btn-method-qris"
+              onclick="selectMethod('qris')"
+            >
+              <span class="pay-icon">📱</span>QRIS
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Tombol Konfirmasi -->
+        <div class="popup-section" style="margin-bottom: 12px;">
           <button
-            class="pay-method-btn"
-            id="btn-method-cash"
-            onclick="selectMethod('cash')"
+            class="pay-confirm-btn"
+            id="btn-confirm-pay"
+            onclick="confirmPayment()"
+            disabled
           >
-            <span class="pay-icon">💵</span>CASH
-          </button>
-          <button
-            class="pay-method-btn"
-            id="btn-method-qris"
-            onclick="selectMethod('qris')"
-          >
-            <span class="pay-icon">📱</span>QRIS
+            Pilih metode dulu
           </button>
         </div>
-        <button
-          class="pay-confirm-btn"
-          id="btn-confirm-pay"
-          onclick="confirmPayment()"
-          disabled
-        >
-          Pilih metode dulu
-        </button>
+
+        <!-- 4. Tombol Batal -->
         <button class="payment-btn-cancel" onclick="closePaymentPopup()">
           ✕ Batal
         </button>
+
       </div>
     </div>
 
